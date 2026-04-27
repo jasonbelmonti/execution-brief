@@ -1,0 +1,4 @@
+interface:
+  display_name: "Handoff Prompt"
+  short_description: "Create next-agent execution handoffs"
+  default_prompt: "Use $handoff-prompt to build a source-grounded handoff prompt with concrete next actions, validation gates, stop conditions, and open questions."
