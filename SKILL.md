@@ -1,120 +1,153 @@
 ---
-name: handoff-prompt
-description: Generate a standardized, source-grounded handoff prompt for the next agent by synthesizing the current thread, project-management artifacts such as Jira or Linear, design or architecture documentation, and current implementation state. Use when handing work to another agent, resuming execution after planning, creating an execution brief, or producing an agentic execution prompt with concrete first actions, validation gates, constraints, stop conditions, and open questions from mixed sources.
+name: execution-brief
+description: Create and maintain a durable, source-grounded Execution Brief artifact for agentic kickoff, execution, resume-after-compression, and review readiness. Use when handing work to another agent, resuming implementation after planning, preserving execution context on disk, preparing review-ready context, or producing an execution artifact with objective, scope, review boundaries, validation gates, stop conditions, planned follow-up work, and revision history.
 ---
 
-# Handoff Prompt
+# Execution Brief
 
 ## Overview
 
-Generate a self-contained handoff prompt that gives the next agent the right context to execute correctly without rereading the full thread. Build a current-state snapshot across planning, design, and implementation, then turn it into clear execution guidance with explicit success criteria, constraints, validation gates, stop conditions, and open questions.
+Create a durable Execution Brief on disk before execution depends on fragile chat context. Treat the brief as the current source-grounded operating artifact for kickoff, execution, context-compression recovery, and review. Keep it concise, source-backed, intentionally revised, and directly usable by another agent without rereading the full thread.
+
+The artifact path is:
+
+```text
+./.codex/execution-briefs/<brief-id>/execution-brief.md
+```
 
 ## Required Workflow
 
-Follow these steps in order. Keep the final handoff prompt concise, source-grounded, and directly usable as the next prompt.
+Follow these steps in order.
 
-### Step 1: Build a source inventory
+### Step 1: Establish the artifact location
+
+Choose a stable `brief_id` from the work item, branch, ticket, or short slug. Create or update:
+
+- `./.codex/execution-briefs/<brief-id>/execution-brief.md`
+- `./.codex/execution-briefs/<brief-id>/execution-brief.sha256`
+
+Read [references/artifact-lifecycle.md](references/artifact-lifecycle.md) before creating, resuming, or updating the artifact.
+
+### Step 2: Build a source inventory
 
 Start with the current thread. List every source that materially affects execution:
-- latest user instructions and decisions in the thread
+
+- latest user instructions and explicit decisions in the thread
 - repo-local operating instructions such as `AGENTS.md`
+- the existing Execution Brief, when resuming or revising one
 - project-management artifacts referenced in the thread or available via tools
 - design docs, architecture notes, PRDs, RFCs, screenshots, or planning docs
 - implementation state in the workspace: branch, worktree, relevant files, diffs, tests, and known gaps
 
-If a ticket, page, file, or document is named but its contents have not been loaded yet, fetch it before drafting the handoff prompt. Do not rely on titles or memory alone.
+If a ticket, page, file, pull request, or document is named but its contents have not been loaded yet, fetch it before drafting or revising the brief. Do not rely on titles or memory alone.
 
-Record source names, dates or timestamps when available, and retrieval status. Mark any referenced but unavailable source as missing input in the final prompt.
+Record source names, dates or timestamps when available, retrieval status, and what each source controls. Mark any referenced but unavailable source as missing input.
 
 Read [references/source-priority.md](references/source-priority.md) before resolving conflicts or freshness.
 
-### Step 2: Extract only execution-relevant state
+### Step 3: Extract execution-relevant state
 
-For each source, pull only the facts the next agent needs to execute:
+Pull only the facts the next agent needs to execute:
+
 - objective and why it matters
 - current status and what is already decided
 - current implementation state and notable incomplete work
 - constraints, dependencies, non-goals, and blockers
 - materially verifiable success criteria
-- risks, unknowns, and assumptions
+- risks, unknowns, assumptions, and accepted tradeoffs
+- review boundary, out-of-scope work, and planned follow-up work
 - required validation commands, manual checks, review gates, or rollout checks
 - stop conditions that require asking the user, changing scope, or escalating
 
-Prefer direct facts over interpretation. Do not include background that will not change execution.
+Prefer direct facts over interpretation. Mark unsupported guidance as `Assumption` or `Inference`.
 
-### Step 3: Normalize planning and design context
+### Step 4: Write or revise the Execution Brief
 
-When a project-management artifact exists, normalize it into these headings even if the source uses different labels:
-
-#### Objective
-What are we trying to achieve, and why does it matter?
-
-#### Context / Constraints
-Relevant background, dependencies, assumptions, non-goals, and implementation constraints.
-
-#### Materially verifiable success criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
-
-#### Execution notes
-Suggested approach, likely files or systems, risks, open questions, and handoff notes.
-
-Preserve the source meaning. Do not invent missing criteria just to fill the shape; mark gaps explicitly.
-
-If success criteria are vague, convert only directly supported expectations into checkable criteria and mark the rest as an open gap.
-
-### Step 4: Resolve contradictions
-
-Prefer the highest-authority, freshest source. If sources disagree:
-- keep the conflict visible
-- state which source you trust and why
-- mark anything not directly supported as `Assumption` or `Inference`
-- use exact dates instead of relative dates
-
-When current code state conflicts with an older ticket or design doc, report both. Intended behavior and implemented behavior are different facts.
-
-### Step 5: Write the handoff prompt
-
-Use [references/handoff-template.md](references/handoff-template.md) as the output contract.
+Use [references/execution-brief-template.md](references/execution-brief-template.md) as the output contract.
 
 Apply these rules:
-- write to the next agent in imperative form
-- make the next action executable: name the first files, commands, tools, or artifacts to inspect or change
-- include exact issue IDs, file paths, branch or worktree names, and document titles when available
-- separate confirmed facts from assumptions and unknowns
-- mention missing sources instead of guessing
-- keep the prompt self-contained, but omit irrelevant conversation history
-- keep the output compact unless the user explicitly asks for exhaustive detail
-- include validation gates that prove success and stop conditions that prevent unsafe guessing
-- if multiple agents may use the prompt, define ownership boundaries or disjoint work areas when known
 
-### Step 6: Perform a handoff quality check
+- write the artifact to disk, not only into chat
+- use exact dates, issue IDs, file paths, branch names, worktree paths, and document titles when available
+- separate confirmed facts from assumptions, inferences, and open questions
+- make the first action executable by naming the first files, commands, tools, or artifacts to inspect or change
+- define review boundaries before execution reaches review
+- include planned follow-up work that should not affect current approval
+- keep the brief compact unless the user explicitly asks for exhaustive detail
+- update `Revision Log` for every intentional artifact revision
+- do not silently rewrite existing scope, constraints, or review boundaries
 
-Before returning the handoff prompt, verify that the next agent can answer these questions without rereading the full thread:
+### Step 5: Validate and checksum the artifact
+
+Validate the artifact with the bundled profile:
+
+```bash
+npx -y @jasonbelmonti/markdown-engine@2.0.0 validate --file ./.codex/execution-briefs/<brief-id>/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml
+```
+
+Then write a checksum:
+
+```bash
+shasum -a 256 ./.codex/execution-briefs/<brief-id>/execution-brief.md > ./.codex/execution-briefs/<brief-id>/execution-brief.sha256
+```
+
+If validation fails, revise the artifact before using it as execution or review context.
+
+### Step 6: Use the brief during execution
+
+At kickoff or after context compression, read the Execution Brief before continuing. Treat it as the durable state snapshot unless a newer explicit user instruction overrides it.
+
+When execution changes material facts, update the brief and checksum immediately. Material facts include changed scope, changed validation gates, discovered blockers, completed milestones, new planned follow-up work, or changed review boundaries.
+
+### Step 7: Prepare review-ready context
+
+Before invoking any review workflow, read [references/review-boundaries.md](references/review-boundaries.md). Use the Execution Brief as the canonical planning artifact and map its sections into a review packet or reviewer prompt:
+
+- `Objective` maps to the task objective.
+- `Execution Scope` in-scope rows map to approval-affecting review scope.
+- `Execution Scope` out-of-scope rows map to non-goals.
+- `Context / Constraints` maps to constraints and accepted tradeoffs.
+- `Review Boundary` maps directly to the approval boundary reviewers must apply.
+- `Planned Follow-up Work` maps to deferred non-blocking work.
+- `Validation Gates` maps to test or risk context.
+- `Review Packet Inputs` records the exact review-context fields reviewers should receive.
+
+Do not allow planned follow-up work or out-of-scope improvements to become blocking review feedback unless the current diff creates a correctness, safety, regression, or maintainability issue inside the stated review boundary.
+
+### Step 8: Perform a quality check
+
+Before handing off, resuming execution, or dispatching review, verify that the artifact answers:
+
 - What is the actual goal?
-- What sources are authoritative?
+- Which sources are authoritative?
 - What has already been decided or implemented?
-- What exactly should I do next?
+- What exactly should happen next?
+- What is in scope and out of scope?
+- What review boundary should prevent diff or scope creep?
 - How will success be checked?
 - What is still uncertain?
-- When should I stop and ask for direction instead of continuing?
+- When should an agent stop and ask for direction?
 
-If any answer is missing, revise the prompt.
+If any answer is missing, revise the brief, validate it, and update the checksum.
 
 ## Output Expectations
 
-The final output should be a ready-to-send handoff prompt, not a meta-explanation of how you gathered context.
+Return the artifact path, validation status, checksum path, and any missing inputs or stop conditions. Do not replace the on-disk artifact with a chat-only summary.
 
 Always:
-- anchor the prompt in the current thread first
-- distinguish confirmed facts from inferred guidance
+
+- anchor the brief in the current thread first
+- distinguish confirmed facts from assumptions and inferences
 - preserve materially verifiable success criteria
 - include concrete first actions
 - include validation gates and stop conditions
+- record review boundaries and planned follow-up work
+- keep the revision log current
 - state blockers and missing inputs plainly
 
 ## Reference Files
 
-- Read [references/source-priority.md](references/source-priority.md) when deciding authority, freshness, or how to merge thread, planning, design, and code state.
-- Read [references/handoff-template.md](references/handoff-template.md) immediately before drafting the final handoff prompt.
+- Read [references/source-priority.md](references/source-priority.md) when deciding authority, freshness, or how to merge thread, planning, design, artifact, and code state.
+- Read [references/artifact-lifecycle.md](references/artifact-lifecycle.md) before creating, resuming, validating, checksumming, or revising an Execution Brief.
+- Read [references/review-boundaries.md](references/review-boundaries.md) before preparing review context or review packet inputs.
+- Use [references/execution-brief-template.md](references/execution-brief-template.md) as the required artifact structure.

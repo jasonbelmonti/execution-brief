@@ -1,4 +1,4 @@
 interface:
-  display_name: "Handoff Prompt"
-  short_description: "Create next-agent execution handoffs"
-  default_prompt: "Use $handoff-prompt to build a source-grounded handoff prompt with concrete next actions, validation gates, stop conditions, and open questions."
+  display_name: "Execution Brief"
+  short_description: "Create durable execution handoff artifacts"
+  default_prompt: "Use $execution-brief to create a source-grounded on-disk Execution Brief with scope, review boundaries, validation gates, stop conditions, checksum, and review packet inputs."
