@@ -1,0 +1,126 @@
+syntaxVersion: markdown-engine.validation@v1
+documentVersion: 1.0.0
+rules:
+  - id: frontmatter.required
+    select:
+      target: document
+    assert:
+      frontmatterRequired:
+        fields:
+          - title
+          - brief_id
+          - artifact_version
+          - status
+          - created_at
+          - updated_at
+          - target_repo
+          - target_branch
+          - review_boundary_id
+
+  - id: sections.required
+    select:
+      target: document
+    assert:
+      sectionsRequired:
+        order: strict
+        headings:
+          - Objective
+          - Context / Constraints
+          - Authoritative Sources
+          - Current State
+          - Execution Scope
+          - Materially Verifiable Success Criteria
+          - Review Boundary
+          - Planned Follow-up Work
+          - Execution Plan
+          - Validation Gates
+          - Stop Conditions
+          - Consensus Review Packet Inputs
+          - Revision Log
+
+  - id: authoritative.sources.table
+    select:
+      target: table
+      section: Authoritative Sources
+      header:
+        - Source
+        - Retrieved at
+        - Authority
+        - Status
+        - Controls
+    assert:
+      tableColumnsRequired:
+        columns:
+          - Source
+          - Retrieved at
+          - Authority
+          - Status
+          - Controls
+
+  - id: execution.scope.table
+    select:
+      target: table
+      section: Execution Scope
+      header:
+        - Scope item
+        - Classification
+        - Approval impact
+        - Notes
+    assert:
+      tableColumnsRequired:
+        columns:
+          - Scope item
+          - Classification
+          - Approval impact
+          - Notes
+
+  - id: review.boundary.table
+    select:
+      target: table
+      section: Review Boundary
+      header:
+        - Boundary
+        - Scope
+        - Approval impact
+        - Notes
+    assert:
+      tableColumnsRequired:
+        columns:
+          - Boundary
+          - Scope
+          - Approval impact
+          - Notes
+
+  - id: consensus.packet.inputs.table
+    select:
+      target: table
+      section: Consensus Review Packet Inputs
+      header:
+        - Packet field
+        - Source section
+        - Required mapping
+        - Notes
+    assert:
+      tableColumnsRequired:
+        columns:
+          - Packet field
+          - Source section
+          - Required mapping
+          - Notes
+
+  - id: revision.log.table
+    select:
+      target: table
+      section: Revision Log
+      header:
+        - Timestamp
+        - Actor
+        - Change
+        - Checksum
+    assert:
+      tableColumnsRequired:
+        columns:
+          - Timestamp
+          - Actor
+          - Change
+          - Checksum
