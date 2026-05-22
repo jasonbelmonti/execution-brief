@@ -1,6 +1,6 @@
 ---
 name: execution-brief
-description: Create and maintain a durable, source-grounded Execution Brief artifact for agentic kickoff, execution, resume-after-compression, and review readiness. Use when handing work to another agent, resuming implementation after planning, preserving execution context on disk, preparing consensus-review inputs, or producing an execution artifact with objective, scope, review boundaries, validation gates, stop conditions, planned follow-up work, and revision history.
+description: Create and maintain a durable, source-grounded Execution Brief artifact for agentic kickoff, execution, resume-after-compression, and review readiness. Use when handing work to another agent, resuming implementation after planning, preserving execution context on disk, preparing review-ready context, or producing an execution artifact with objective, scope, review boundaries, validation gates, stop conditions, planned follow-up work, and revision history.
 ---
 
 # Execution Brief
@@ -99,17 +99,18 @@ At kickoff or after context compression, read the Execution Brief before continu
 
 When execution changes material facts, update the brief and checksum immediately. Material facts include changed scope, changed validation gates, discovered blockers, completed milestones, new planned follow-up work, or changed review boundaries.
 
-### Step 7: Prepare consensus-review context
+### Step 7: Prepare review-ready context
 
-Before invoking `consensus-review`, read [references/review-boundaries.md](references/review-boundaries.md). Use the Execution Brief as the canonical planning artifact and map its sections into the review packet:
+Before invoking any review workflow, read [references/review-boundaries.md](references/review-boundaries.md). Use the Execution Brief as the canonical planning artifact and map its sections into a review packet or reviewer prompt:
 
-- `Objective` maps to `task_definition.objective`
-- `Execution Scope` in-scope rows map to `task_definition.in_scope`
-- `Execution Scope` out-of-scope rows map to `task_definition.out_of_scope`
-- `Review Boundary` maps directly to `review_boundary`
-- `Planned Follow-up Work` maps to `planned_follow_up_work` and non-blocking out-of-scope context
-- `Validation Gates` maps to `test_or_risk_context`
-- `Consensus Review Packet Inputs` records the exact packet fields reviewers should receive
+- `Objective` maps to the task objective.
+- `Execution Scope` in-scope rows map to approval-affecting review scope.
+- `Execution Scope` out-of-scope rows map to non-goals.
+- `Context / Constraints` maps to constraints and accepted tradeoffs.
+- `Review Boundary` maps directly to the approval boundary reviewers must apply.
+- `Planned Follow-up Work` maps to deferred non-blocking work.
+- `Validation Gates` maps to test or risk context.
+- `Review Packet Inputs` records the exact review-context fields reviewers should receive.
 
 Do not allow planned follow-up work or out-of-scope improvements to become blocking review feedback unless the current diff creates a correctness, safety, regression, or maintainability issue inside the stated review boundary.
 
@@ -148,5 +149,5 @@ Always:
 
 - Read [references/source-priority.md](references/source-priority.md) when deciding authority, freshness, or how to merge thread, planning, design, artifact, and code state.
 - Read [references/artifact-lifecycle.md](references/artifact-lifecycle.md) before creating, resuming, validating, checksumming, or revising an Execution Brief.
-- Read [references/review-boundaries.md](references/review-boundaries.md) before preparing review context or consensus-review packet inputs.
+- Read [references/review-boundaries.md](references/review-boundaries.md) before preparing review context or review packet inputs.
 - Use [references/execution-brief-template.md](references/execution-brief-template.md) as the required artifact structure.

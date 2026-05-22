@@ -1,7 +1,7 @@
 # Review Boundaries
 
-Use this reference before preparing review context, building consensus-review
-packet inputs, or revising approval criteria.
+Use this reference before preparing review context, building review packet
+inputs, or revising approval criteria.
 
 ## Boundary Purpose
 
@@ -45,24 +45,25 @@ Use these classifications consistently:
 - If the boundary is ambiguous enough that a responsible verdict cannot be
   issued, mark that as a confidence risk and stop before review dispatch.
 
-## Consensus Review Mapping
+## Review Packet Mapping
 
-Map the Execution Brief into `consensus-review` packet fields as follows:
+Map the Execution Brief into review packet or reviewer-prompt fields as follows:
 
-| Execution Brief section | consensus-review packet field |
+| Execution Brief section | Review field |
 | --- | --- |
-| Objective | `task_definition.objective` |
-| Execution Scope in-scope rows | `task_definition.in_scope` |
-| Execution Scope out-of-scope rows | `task_definition.out_of_scope` |
-| Context / Constraints | `task_definition.constraints` |
+| Objective | `objective` |
+| Objective and Execution Plan | `intended_behavior_change` |
+| Execution Scope in-scope rows | `in_scope` |
+| Execution Scope out-of-scope rows | `out_of_scope` |
+| Context / Constraints | `constraints` |
 | Review Boundary | `review_boundary` |
 | Planned Follow-up Work | `planned_follow_up_work` |
 | Validation Gates | `test_or_risk_context` |
 | Authoritative Sources | `planning_artifacts` and `repo_instructions` as relevant |
 | Current State | `planning_artifacts` and task context summaries |
 
-The `Consensus Review Packet Inputs` table should name every packet field that
-must be populated before reviewer dispatch.
+The `Review Packet Inputs` table should name every review-context field that
+must be populated before review.
 
 ## Boundary Quality Check
 

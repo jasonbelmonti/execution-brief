@@ -51,7 +51,7 @@ ground it in the latest explicit user instruction or planning artifact.
 
 - [ ] The requested behavior or artifact exists in the target workspace.
 - [ ] Required validation gates pass or failures are documented with owner-visible stop conditions.
-- [ ] Review boundaries and planned follow-up work are explicit before review dispatch.
+- [ ] Review boundaries and planned follow-up work are explicit before review.
 
 # Review Boundary
 
@@ -86,13 +86,15 @@ ground it in the latest explicit user instruction or planning artifact.
 - The requested change requires destructive operations or credentialed access not already approved.
 - Review boundary changes would alter approval criteria after implementation has started.
 
-# Consensus Review Packet Inputs
+# Review Packet Inputs
 
-| Packet field | Source section | Required mapping | Notes |
+| Field | Source section | Required mapping | Notes |
 | --- | --- | --- | --- |
-| `task_definition.objective` | Objective | Copy the objective summary. | Keep source-grounded. |
-| `task_definition.in_scope` | Execution Scope | Include rows classified as in-scope. | Blocking review items. |
-| `task_definition.out_of_scope` | Execution Scope | Include rows classified as out-of-scope. | Non-goals and deferred work. |
+| `objective` | Objective | Copy the objective summary. | Keep source-grounded. |
+| `intended_behavior_change` | Objective and Execution Plan | Summarize what should be different after execution. | Use confirmed facts only. |
+| `in_scope` | Execution Scope | Include rows classified as in-scope. | Blocking review items. |
+| `out_of_scope` | Execution Scope | Include rows classified as out-of-scope. | Non-goals and deferred work. |
+| `constraints` | Context / Constraints | Include constraints and accepted tradeoffs. | Preserve source authority. |
 | `review_boundary` | Review Boundary | Copy the approval boundary. | Primary anti-scope-creep control. |
 | `planned_follow_up_work` | Planned Follow-up Work | Copy each deferred item. | Non-blocking unless contradicted by the diff. |
 | `test_or_risk_context` | Validation Gates | Summarize checks run, skipped, or required. | Include known confidence risks. |

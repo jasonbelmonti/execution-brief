@@ -35,7 +35,7 @@ rules:
           - Execution Plan
           - Validation Gates
           - Stop Conditions
-          - Consensus Review Packet Inputs
+          - Review Packet Inputs
           - Revision Log
 
   - id: authoritative.sources.table
@@ -91,19 +91,19 @@ rules:
           - Approval impact
           - Notes
 
-  - id: consensus.packet.inputs.table
+  - id: review.packet.inputs.table
     select:
       target: table
-      section: Consensus Review Packet Inputs
+      section: Review Packet Inputs
       header:
-        - Packet field
+        - Field
         - Source section
         - Required mapping
         - Notes
     assert:
       tableColumnsRequired:
         columns:
-          - Packet field
+          - Field
           - Source section
           - Required mapping
           - Notes
