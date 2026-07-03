@@ -18,8 +18,8 @@ hyphen-case slug. Keep the ID stable for the work item.
 ## Creation Procedure
 
 1. Gather the source inventory before writing the brief.
-2. Start from `references/execution-brief-template.md`.
-3. Replace template placeholders with source-grounded facts.
+2. Draft a brief that satisfies `profiles/execution-brief.yaml`.
+3. Populate required sections with source-grounded facts.
 4. Mark missing sources and open questions explicitly.
 5. Validate the brief with `profiles/execution-brief.yaml`.
 6. Write the SHA-256 checksum file.

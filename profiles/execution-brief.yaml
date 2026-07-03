@@ -124,3 +124,17 @@ rules:
           - Actor
           - Change
           - Checksum
+
+  - id: document.no-placeholders
+    select:
+      target: document
+    assert:
+      text:
+        excludes:
+          - "TODO"
+          - "TBD"
+          - "???"
+          - "/absolute/path/to/target-repo"
+          - "EB-0000"
+          - "RB-0000"
+          - "State what must be achieved"

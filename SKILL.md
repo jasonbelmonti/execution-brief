@@ -85,7 +85,7 @@ Prefer direct facts over interpretation. Mark unsupported guidance as `Assumptio
 
 ### Step 4: Write or revise the Execution Brief
 
-Use [references/execution-brief-template.md](references/execution-brief-template.md) as the output contract.
+Use [profiles/execution-brief.yaml](profiles/execution-brief.yaml) as the required artifact structure and deterministic validation contract.
 
 Apply these rules:
 
@@ -101,7 +101,7 @@ Apply these rules:
 
 ### Step 5: Validate and checksum the artifact
 
-Validate the artifact with the bundled profile:
+Validate the artifact with the installed bundled CLI and declarative profile:
 
 ```bash
 "${MARKDOWN_ENGINE_BIN_DIR:-$HOME/.local/bin}/markdown-engine" validate --file ./.codex/execution-briefs/<brief-id>/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json
@@ -172,4 +172,4 @@ Always:
 - Read [references/source-priority.md](references/source-priority.md) when deciding authority, freshness, or how to merge thread, planning, design, artifact, and code state.
 - Read [references/artifact-lifecycle.md](references/artifact-lifecycle.md) before creating, resuming, validating, checksumming, or revising an Execution Brief.
 - Read [references/review-boundaries.md](references/review-boundaries.md) before preparing review context or review packet inputs.
-- Use [references/execution-brief-template.md](references/execution-brief-template.md) as the required artifact structure.
+- Use [profiles/execution-brief.yaml](profiles/execution-brief.yaml) as the required artifact structure and markdown-engine validation profile.
