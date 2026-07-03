@@ -1,26 +1,49 @@
 # Compact execution-ready contract for durable Execution Brief artifacts.
-# Semantic sufficiency remains a review responsibility. YAML frontmatter value
-# checks are enforced by scripts/validate_execution_brief.mjs.
-syntaxVersion: markdown-engine.validation@v1
+# v2 conditionals keep optional context bounded to the work actually needed.
+syntaxVersion: markdown-engine.validation@v2
 documentVersion: 1.0.0
 rules:
-  - id: frontmatter.required
+  - id: frontmatter.shape
     select:
       target: document
     assert:
-      frontmatterRequired:
+      frontmatterShape:
+        presence: required
         fields:
-          - title
-          - brief_id
-          - artifact_version
-          - status
-          - created_at
-          - updated_at
-          - target_repo
-          - target_branch
-          - review_boundary_id
+          - field: title
+            required: true
+            valueType: string
+            nonEmpty: true
+          - field: brief_id
+            required: true
+            valueType: string
+            nonEmpty: true
+          - field: artifact_version
+            required: true
+            valueType: string
+            nonEmpty: true
+          - field: status
+            required: true
+            valueType: string
+            nonEmpty: true
+          - field: created_at
+            required: true
+            valueType: string
+            nonEmpty: true
+          - field: updated_at
+            required: true
+            valueType: string
+            nonEmpty: true
+          - field: target_repo
+            required: true
+            valueType: string
+            nonEmpty: true
+          - field: target_branch
+            required: true
+            valueType: string
+            nonEmpty: true
 
-  - id: sections.required
+  - id: sections.required.core
     select:
       target: document
     assert:
@@ -28,17 +51,12 @@ rules:
         order: strict
         headings:
           - Objective
-          - Context / Constraints
           - Authoritative Sources
-          - Current State
           - Execution Scope
           - Materially Verifiable Success Criteria
-          - Review Boundary
-          - Planned Follow-up Work
           - Execution Plan
           - Validation Gates
           - Stop Conditions
-          - Review Packet Inputs
           - Revision Log
 
   - id: document.length.compact
@@ -57,10 +75,50 @@ rules:
         min: 20
         max: 700
 
+  - id: context.or.current-state
+    anyOf:
+      - label: context-constraints
+        select:
+          target: list
+          section: Context / Constraints
+          ordered: false
+        assert:
+          textLength:
+            min: 10
+      - label: current-state
+        select:
+          target: list
+          section: Current State
+          ordered: false
+        assert:
+          textLength:
+            min: 10
+
   - id: context.constraints.list
+    when:
+      select:
+        target: section
+        title: Context / Constraints
+      assert:
+        exists: true
     select:
       target: list
       section: Context / Constraints
+      ordered: false
+    assert:
+      textLength:
+        min: 10
+
+  - id: current.state.list
+    when:
+      select:
+        target: section
+        title: Current State
+      assert:
+        exists: true
+    select:
+      target: list
+      section: Current State
       ordered: false
     assert:
       textLength:
@@ -95,15 +153,6 @@ rules:
         - Authority
         - Status
         - Controls
-    assert:
-      textLength:
-        min: 10
-
-  - id: current.state.list
-    select:
-      target: list
-      section: Current State
-      ordered: false
     assert:
       textLength:
         min: 10
@@ -147,7 +196,30 @@ rules:
       textLength:
         min: 10
 
+  - id: review.boundary.frontmatter
+    when:
+      select:
+        target: section
+        title: Review Boundary
+      assert:
+        exists: true
+    select:
+      target: document
+    assert:
+      frontmatterShape:
+        fields:
+          - field: review_boundary_id
+            required: true
+            valueType: string
+            nonEmpty: true
+
   - id: review.boundary.table
+    when:
+      select:
+        target: section
+        title: Review Boundary
+      assert:
+        exists: true
     select:
       target: table
       section: Review Boundary
@@ -165,6 +237,12 @@ rules:
           - Notes
 
   - id: review.boundary.rows
+    when:
+      select:
+        target: section
+        title: Review Boundary
+      assert:
+        exists: true
     select:
       target: tableRow
       section: Review Boundary
@@ -178,6 +256,12 @@ rules:
         min: 10
 
   - id: planned.followup.list
+    when:
+      select:
+        target: section
+        title: Planned Follow-up Work
+      assert:
+        exists: true
     select:
       target: list
       section: Planned Follow-up Work
@@ -214,6 +298,12 @@ rules:
         min: 10
 
   - id: review.packet.inputs.table
+    when:
+      select:
+        target: section
+        title: Review Packet Inputs
+      assert:
+        exists: true
     select:
       target: table
       section: Review Packet Inputs
@@ -231,6 +321,12 @@ rules:
           - Notes
 
   - id: review.packet.inputs.rows
+    when:
+      select:
+        target: section
+        title: Review Packet Inputs
+      assert:
+        exists: true
     select:
       target: tableRow
       section: Review Packet Inputs
