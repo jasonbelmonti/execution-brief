@@ -104,7 +104,7 @@ Apply these rules:
 Validate the artifact with the bundled profile:
 
 ```bash
-"${CODEX_HOME:-$HOME/.codex}/bin/markdown-engine" validate --file ./.codex/execution-briefs/<brief-id>/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json
+"${MARKDOWN_ENGINE_BIN_DIR:-$HOME/.local/bin}/markdown-engine" validate --file ./.codex/execution-briefs/<brief-id>/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json
 ```
 
 Then write a checksum:

@@ -74,7 +74,7 @@ ground it in the latest explicit user instruction or planning artifact.
 # Validation Gates
 
 - Validate this brief:
-  `"${CODEX_HOME:-$HOME/.codex}/bin/markdown-engine" validate --file ./.codex/execution-briefs/EB-0000/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json`
+  `"${MARKDOWN_ENGINE_BIN_DIR:-$HOME/.local/bin}/markdown-engine" validate --file ./.codex/execution-briefs/EB-0000/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json`
 - Run target-repo tests or checks that prove the in-scope behavior.
 - Record failed or skipped validation as a stop condition when it affects confidence.
 
