@@ -101,10 +101,12 @@ Apply these rules:
 
 ### Step 5: Validate and checksum the artifact
 
-Validate the artifact with the installed bundled CLI and declarative profile:
+Validate the artifact with the skill wrapper. The wrapper runs the
+declarative profile and rejects unresolved placeholder values in YAML
+frontmatter:
 
 ```bash
-"${MARKDOWN_ENGINE_BIN_DIR:-$HOME/.local/bin}/markdown-engine" validate --file ./.codex/execution-briefs/<brief-id>/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json
+node <skill-dir>/scripts/validate_execution_brief.mjs --file ./.codex/execution-briefs/<brief-id>/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json
 ```
 
 Then write a checksum:

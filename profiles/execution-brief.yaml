@@ -1,3 +1,6 @@
+# Compact execution-ready contract for durable Execution Brief artifacts.
+# Semantic sufficiency remains a review responsibility. YAML frontmatter value
+# checks are enforced by scripts/validate_execution_brief.mjs.
 syntaxVersion: markdown-engine.validation@v1
 documentVersion: 1.0.0
 rules:
@@ -38,6 +41,31 @@ rules:
           - Review Packet Inputs
           - Revision Log
 
+  - id: document.length.compact
+    select:
+      target: document
+    assert:
+      textLength:
+        max: 18000
+
+  - id: objective.length.compact
+    select:
+      target: section
+      title: Objective
+    assert:
+      textLength:
+        min: 20
+        max: 700
+
+  - id: context.constraints.list
+    select:
+      target: list
+      section: Context / Constraints
+      ordered: false
+    assert:
+      textLength:
+        min: 10
+
   - id: authoritative.sources.table
     select:
       target: table
@@ -57,6 +85,29 @@ rules:
           - Status
           - Controls
 
+  - id: authoritative.sources.rows
+    select:
+      target: tableRow
+      section: Authoritative Sources
+      tableHeader:
+        - Source
+        - Retrieved at
+        - Authority
+        - Status
+        - Controls
+    assert:
+      textLength:
+        min: 10
+
+  - id: current.state.list
+    select:
+      target: list
+      section: Current State
+      ordered: false
+    assert:
+      textLength:
+        min: 10
+
   - id: execution.scope.table
     select:
       target: table
@@ -73,6 +124,28 @@ rules:
           - Classification
           - Approval impact
           - Notes
+
+  - id: execution.scope.rows
+    select:
+      target: tableRow
+      section: Execution Scope
+      tableHeader:
+        - Scope item
+        - Classification
+        - Approval impact
+        - Notes
+    assert:
+      textLength:
+        min: 10
+
+  - id: success.criteria.list
+    select:
+      target: list
+      section: Materially Verifiable Success Criteria
+      ordered: false
+    assert:
+      textLength:
+        min: 10
 
   - id: review.boundary.table
     select:
@@ -91,6 +164,55 @@ rules:
           - Approval impact
           - Notes
 
+  - id: review.boundary.rows
+    select:
+      target: tableRow
+      section: Review Boundary
+      tableHeader:
+        - Boundary
+        - Scope
+        - Approval impact
+        - Notes
+    assert:
+      textLength:
+        min: 10
+
+  - id: planned.followup.list
+    select:
+      target: list
+      section: Planned Follow-up Work
+      ordered: false
+    assert:
+      textLength:
+        min: 10
+
+  - id: execution.plan.ordered-list
+    select:
+      target: list
+      section: Execution Plan
+      ordered: true
+    assert:
+      textLength:
+        min: 10
+
+  - id: validation.gates.list
+    select:
+      target: list
+      section: Validation Gates
+      ordered: false
+    assert:
+      textLength:
+        min: 10
+
+  - id: stop.conditions.list
+    select:
+      target: list
+      section: Stop Conditions
+      ordered: false
+    assert:
+      textLength:
+        min: 10
+
   - id: review.packet.inputs.table
     select:
       target: table
@@ -107,6 +229,19 @@ rules:
           - Source section
           - Required mapping
           - Notes
+
+  - id: review.packet.inputs.rows
+    select:
+      target: tableRow
+      section: Review Packet Inputs
+      tableHeader:
+        - Field
+        - Source section
+        - Required mapping
+        - Notes
+    assert:
+      textLength:
+        min: 10
 
   - id: revision.log.table
     select:
@@ -125,6 +260,19 @@ rules:
           - Change
           - Checksum
 
+  - id: revision.log.rows
+    select:
+      target: tableRow
+      section: Revision Log
+      tableHeader:
+        - Timestamp
+        - Actor
+        - Change
+        - Checksum
+    assert:
+      textLength:
+        min: 10
+
   - id: document.no-placeholders
     select:
       target: document
@@ -135,6 +283,10 @@ rules:
           - "TBD"
           - "???"
           - "/absolute/path/to/target-repo"
+          - "<brief-id>"
+          - "<target-repo>"
+          - "<target-branch>"
+          - "<checksum>"
           - "EB-0000"
           - "RB-0000"
           - "State what must be achieved"
