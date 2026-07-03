@@ -107,6 +107,9 @@ Validate the artifact with the installed bundled CLI and declarative profile:
 "${MARKDOWN_ENGINE_BIN_DIR:-$HOME/.local/bin}/markdown-engine" validate --file ./.codex/execution-briefs/<brief-id>/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json
 ```
 
+The profile uses `markdown-engine.validation@v2`; use a `markdown-engine` CLI
+build that supports `frontmatterShape` and rule-level `when`.
+
 Then write a checksum:
 
 ```bash
