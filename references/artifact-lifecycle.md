@@ -8,8 +8,8 @@ revising an Execution Brief.
 Write the brief inside the target workspace:
 
 ```text
-./.codex/execution-briefs/<brief-id>/execution-brief.md
-./.codex/execution-briefs/<brief-id>/execution-brief.sha256
+./.codefactory/execution-briefs/<brief-id>/execution-brief.md
+./.codefactory/execution-briefs/<brief-id>/execution-brief.sha256
 ```
 
 Choose `<brief-id>` from the ticket ID, branch name, PR number, or a short
@@ -30,7 +30,7 @@ hyphen-case slug. Keep the ID stable for the work item.
 Run from the target workspace:
 
 ```bash
-shasum -a 256 ./.codex/execution-briefs/<brief-id>/execution-brief.md > ./.codex/execution-briefs/<brief-id>/execution-brief.sha256
+shasum -a 256 ./.codefactory/execution-briefs/<brief-id>/execution-brief.md > ./.codefactory/execution-briefs/<brief-id>/execution-brief.sha256
 ```
 
 Use the checksum as a drift signal. It does not replace the `Revision Log`.

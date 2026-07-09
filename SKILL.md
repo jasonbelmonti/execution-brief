@@ -12,7 +12,7 @@ Create a durable Execution Brief on disk before execution depends on fragile cha
 The artifact path is:
 
 ```text
-./.codex/execution-briefs/<brief-id>/execution-brief.md
+./.codefactory/execution-briefs/<brief-id>/execution-brief.md
 ```
 
 ## Durable Artifact Context Contract
@@ -45,8 +45,8 @@ Follow these steps in order.
 
 Choose a stable `brief_id` from the work item, branch, ticket, or short slug. Create or update:
 
-- `./.codex/execution-briefs/<brief-id>/execution-brief.md`
-- `./.codex/execution-briefs/<brief-id>/execution-brief.sha256`
+- `./.codefactory/execution-briefs/<brief-id>/execution-brief.md`
+- `./.codefactory/execution-briefs/<brief-id>/execution-brief.sha256`
 
 Read [references/artifact-lifecycle.md](references/artifact-lifecycle.md) before creating, resuming, or updating the artifact.
 
@@ -104,7 +104,7 @@ Apply these rules:
 Validate the artifact with the installed bundled CLI and declarative profile:
 
 ```bash
-"${MARKDOWN_ENGINE_BIN_DIR:-$HOME/.local/bin}/markdown-engine" validate --file ./.codex/execution-briefs/<brief-id>/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json
+"${MARKDOWN_ENGINE_BIN_DIR:-$HOME/.local/bin}/markdown-engine" validate --file ./.codefactory/execution-briefs/<brief-id>/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json
 ```
 
 The profile uses `markdown-engine.validation@v2`; use a `markdown-engine` CLI
@@ -113,7 +113,7 @@ build that supports `frontmatterShape` and rule-level `when`.
 Then write a checksum:
 
 ```bash
-shasum -a 256 ./.codex/execution-briefs/<brief-id>/execution-brief.md > ./.codex/execution-briefs/<brief-id>/execution-brief.sha256
+shasum -a 256 ./.codefactory/execution-briefs/<brief-id>/execution-brief.md > ./.codefactory/execution-briefs/<brief-id>/execution-brief.sha256
 ```
 
 If validation fails, revise the artifact before using it as execution or review context.
