@@ -62,8 +62,10 @@ Map the Execution Brief into review packet or reviewer-prompt fields as follows:
 | Authoritative Sources | `planning_artifacts` and `repo_instructions` as relevant |
 | Current State | `planning_artifacts` and task context summaries |
 
-The `Review Packet Inputs` table should name every review-context field that
-must be populated before review.
+Derive this mapping at review dispatch by default. Persist a `Review Packet
+Inputs` table only when the exact field mapping is itself needed for durable
+handoff or review control; do not duplicate brief content merely to restate the
+mapping.
 
 ## Boundary Quality Check
 
