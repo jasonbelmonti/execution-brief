@@ -42,6 +42,9 @@ rules:
             required: true
             valueType: string
             nonEmpty: true
+          - field: compactness_contract
+            valueType: string
+            nonEmpty: true
 
   - id: sections.required.core
     select:
@@ -59,12 +62,34 @@ rules:
           - Stop Conditions
           - Revision Log
 
-  - id: document.length.compact
+  # Advisory target for every brief. Warning diagnostics do not make the
+  # aggregate validation result invalid and must not trigger repair by themselves.
+  - id: document.source-length.target
+    severity: warning
     select:
       target: document
     assert:
-      textLength:
-        max: 18000
+      sourceLength:
+        max: 10000
+
+  # New and materially revised briefs opt into the hard source budget with
+  # `compactness_contract: source-v1`. Legacy briefs migrate lazily.
+  - id: document.source-length.maximum
+    when:
+      select:
+        target: document
+      assert:
+        frontmatterShape:
+          fields:
+            - field: compactness_contract
+              required: true
+              valueType: string
+              nonEmpty: true
+    select:
+      target: document
+    assert:
+      sourceLength:
+        max: 14000
 
   - id: objective.length.compact
     select:
