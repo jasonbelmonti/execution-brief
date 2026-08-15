@@ -153,8 +153,8 @@ Validate the artifact with the installed bundled CLI and declarative profile:
 "${MARKDOWN_ENGINE_BIN_DIR:-$HOME/.local/bin}/markdown-engine" validate --file ./.codefactory/execution-briefs/<brief-id>/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json
 ```
 
-The profile uses `markdown-engine.validation@v2` and `sourceLength`; use
-`markdown-engine` CLI 3.2.0 or newer.
+The profile uses `markdown-engine.validation@v2` and `sourceLength`; use the
+shared CLI selected by the active fleet runtime policy.
 
 Interpret compactness diagnostics as follows:
 

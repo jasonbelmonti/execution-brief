@@ -1,0 +1,9 @@
+{
+  "kind": "skill-markdown-engine-contract",
+  "schemaVersion": 1,
+  "profile": "profiles/execution-brief.yaml",
+  "cases": [
+    { "name": "brief-passes", "file": "validation/fixtures/execution-brief.md", "exitStatus": 0, "valid": true, "diagnosticCodes": [] },
+    { "name": "skill-guide-fails", "file": "SKILL.md", "exitStatus": 1, "valid": false, "diagnosticCodes": ["profile.validation.sectionMissing"] }
+  ]
+}
