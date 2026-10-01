@@ -5,6 +5,14 @@ description: Create and maintain a durable, source-grounded Execution Brief arti
 
 # Execution Brief
 
+## Artifact placement
+
+New operational artifacts use `.context/execution/` in the executing source worktree. For an assigned capsule, first inspect status and require a valid binding, active run, current-input acknowledgment and no recovery operation; resolve the execution directory from `binding.value.contextWorktreePath` instead of assuming the example root. A recorded legacy `.context-capsule` run keeps that directory and uses its `execution/` subtree. Examples below assume the new `.context` root; substitute the verified bound root for legacy runs.
+
+When a capsule assignment is anticipated, author prerequisite drafts outside source/context worktrees, explicitly capture the required bytes, establish the assignment through the capsule lifecycle, then place canonical artifacts in its execution directory. Startup refuses pre-existing context directories: preserve an unmanaged `.context` and use a fresh isolated source worktree with explicitly staged inputs. Without an assigned capsule, ignored `.context/execution/` is local state and has no checkpoint or handoff retention guarantee.
+
+Keep `execution/plan.md` as the compact current-state index referencing one canonical plan. Input, `records/` and `inherited/` remain runtime-owned. Keep current and legacy operational directories out of source commits; preserve historical `.codefactory` bytes and references without moving them automatically.
+
 ## Overview
 
 Create a durable Execution Brief on disk before execution depends on fragile chat context. Treat the brief as the current source-grounded operating artifact for kickoff, execution, context-compression recovery, and review. Keep it concise, source-backed, intentionally revised, and directly usable by another agent without rereading the full thread.
@@ -12,7 +20,7 @@ Create a durable Execution Brief on disk before execution depends on fragile cha
 The artifact path is:
 
 ```text
-./.codefactory/execution-briefs/<brief-id>/execution-brief.md
+./.context/execution/execution-briefs/<brief-id>/execution-brief.md
 ```
 
 ## Durable Artifact Context Contract
@@ -46,8 +54,8 @@ Follow these steps in order.
 
 Choose a stable `brief_id` from the work item, branch, ticket, or short slug. Create or update:
 
-- `./.codefactory/execution-briefs/<brief-id>/execution-brief.md`
-- `./.codefactory/execution-briefs/<brief-id>/execution-brief.sha256`
+- `./.context/execution/execution-briefs/<brief-id>/execution-brief.md`
+- `./.context/execution/execution-briefs/<brief-id>/execution-brief.sha256`
 
 Read [references/artifact-lifecycle.md](references/artifact-lifecycle.md) before creating, resuming, or updating the artifact.
 
@@ -150,7 +158,7 @@ not run the checksum until this check is complete.
 Validate the artifact with the installed bundled CLI and declarative profile:
 
 ```bash
-"${MARKDOWN_ENGINE_BIN_DIR:-$HOME/.local/bin}/markdown-engine" validate --file ./.codefactory/execution-briefs/<brief-id>/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json
+"${MARKDOWN_ENGINE_BIN_DIR:-$HOME/.local/bin}/markdown-engine" validate --file ./.context/execution/execution-briefs/<brief-id>/execution-brief.md --profile <skill-dir>/profiles/execution-brief.yaml --format json
 ```
 
 The profile uses `markdown-engine.validation@v2` and `sourceLength`; use the
@@ -169,7 +177,7 @@ If validation fails, revise the artifact and validate again before using it as
 execution or review context. When validation is valid, write the checksum:
 
 ```bash
-shasum -a 256 ./.codefactory/execution-briefs/<brief-id>/execution-brief.md > ./.codefactory/execution-briefs/<brief-id>/execution-brief.sha256
+shasum -a 256 ./.context/execution/execution-briefs/<brief-id>/execution-brief.md > ./.context/execution/execution-briefs/<brief-id>/execution-brief.sha256
 ```
 
 ### Step 7: Use the brief during execution
